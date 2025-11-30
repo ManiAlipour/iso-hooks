@@ -1,6 +1,6 @@
 {
   "name": "iso-hooks",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A collection of modern, SSR-safe React hooks.",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,18 +13,23 @@
       "require": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "react",
     "hooks",
     "ssr",
-    "typescript"
+    "typescript",
+    "iso-hooks"
   ],
-  "author": "",
+  "author": "Mani Alipour <mani.alipour.dev@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -36,8 +41,6 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "happy-dom": "^20.0.11",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^4.0.14"

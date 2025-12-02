@@ -1,38 +1,20 @@
-# 🚀 iso-hooks
+# 📦 Iso Hooks
 
-> A collection of modern, **SSR-safe**, and lightweight React hooks.
-> Built for real-world applications with Next.js, Remix, and React 18+.
+A collection of lightweight, type-safe, and SSR-compatible React hooks. Designed for modern React applications (Next.js, Remix, Vite).
 
+![npm version](https://img.shields.io/npm/v/iso-hooks?style=flat-square&color=blue)
+![License](https://img.shields.io/npm/l/iso-hooks?style=flat-square)
+![Downloads](https://img.shields.io/npm/dt/iso-hooks?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square&logo=typescript)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-Passing-success?style=flat-square)
-![NPM Version](https://img.shields.io/npm/v/iso-hooks?style=flat-square)
-
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Installation](#-installation)
-- [Usage](#-usage)
-  - [useLocalStorage](#1-uselocalstorage)
-  - [useOnClickOutside](#2-useonclickoutside)
-  - [useMediaQuery](#3-usemediaquery)
-  - [useCopyToClipboard](#4-usecopytoclipboard)
-  - [useWindowSize](#5-usewindowsize)
-  - [useDebounce](#6-usedebounce)
-  - [useInterval](#7-useinterval)
-  - [useScrollLock](#8-usescrolllock)
-- [Development](#-development)
-- [License](#-license)
 
 ## ✨ Features
 
-- **SSR Safe:** No more `Hydration Mismatch` errors. Hooks are designed to work seamlessly with Server-Side Rendering (Next.js/Remix).
-- **Type-Safe:** Written in TypeScript with full type definitions included.
-- **Lightweight:** Tree-shakable exports ensuring a minimal bundle size.
-- **Modern:** Uses `useSyncExternalStore` for concurrent React compatibility.
-- **Real-time Sync:** `useLocalStorage` automatically syncs state across browser tabs.
+- 🛡️ **SSR Safe:** Built with server-side rendering in mind (won't break Next.js builds).
+- 🔷 **TypeScript:** Written in TypeScript with full type definitions included.
+- 🌲 **Tree Shakeable:** Import only the hooks you need.
+- 🪶 **Lightweight:** Zero dependencies.
 
-## 📦 Installation
+## 🚀 Installation
 
 ```bash
 npm install iso-hooks
@@ -41,17 +23,17 @@ yarn add iso-hooks
 # or
 pnpm add iso-hooks
 
-## 🛠 Usage
+## 📚 Documentation
 
 ### 1. `useLocalStorage`
 
-Persist state in `localStorage` with SSR safety. It also syncs state across different tabs automatically!
+Persist state in `localStorage` with SSR safety. It automatically syncs state across different tabs and windows.
 
 tsx
 import { useLocalStorage } from "iso-hooks";
 
 const App = () => {
-  // Similar to useState, but persists in localStorage
+  // Usage: useLocalStorage(key, initialValue)
   const [theme, setTheme] = useLocalStorage("theme", "light");
 
   return (
@@ -61,6 +43,8 @@ Current theme: {theme}
   );
 };
 
+---
+
 ### 2. `useOnClickOutside`
 
 Detect clicks outside of a specified element. Perfect for closing modals, dropdowns, or menus.
@@ -69,69 +53,29 @@ tsx
 import { useRef, useState } from "react";
 import { useOnClickOutside } from "iso-hooks";
 
-const Dropdown = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Modal = () => {
+  const [isOpen, setOpen] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Close the dropdown when clicking outside of the referenced element
-  useOnClickOutside(ref, () => setIsOpen(false));
+  // Close the modal when clicking outside of the referenced element
+  useOnClickOutside(ref, () => setOpen(false));
+
+  if (!isOpen) return null;
 
   return (
-<div ref={ref} className="relative">
-<button onClick={() => setIsOpen(!isOpen)}>Toggle Menu</button>
-{isOpen && (
-<ul className="absolute top-full">
-<li>Item 1</li>
-<li>Item 2</li>
-</ul>
-)}
+<div className="overlay">
+<div ref={ref} className="modal-content">
+Click outside to close me!
+</div>
 </div>
   );
 };
 
-### 3. `useMediaQuery`
+---
 
-Subscribe to media queries specifically designed for SSR environments. It avoids hydration mismatches by returning `false` initially on the server.
+### 3. `useWindowSize`
 
-tsx
-import { useMediaQuery } from "iso-hooks";
-
-const ResponsiveComponent = () => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
-  if (isMobile) return <div>Mobile View</div>;
-
-  return <div>Desktop View {isDarkMode && "(Dark Mode)"}</div>;
-};
-
-### 4. `useCopyToClipboard`
-
-Copy text to the clipboard securely. It handles the asynchronous nature of the Clipboard API and resets the copied state automatically after a delay (default 2000ms).
-
-tsx
-import { useCopyToClipboard } from "iso-hooks";
-
-const CopyButton = ({ text }: { text: string }) => {
-  const [copiedText, copy] = useCopyToClipboard();
-
-  const handleCopy = async () => {
-const success = await copy(text);
-if (success) {
-console.log("Copied successfully!");
-}
-  };
-
-  return (
-<button onClick={handleCopy}>
-{copiedText ? "Copied!" : "Copy to Clipboard"}
-</button>
-  );
-};
-
-### 5. `useWindowSize`
-
-Tracks the browser window dimensions. Returns `undefined` for width/height during SSR to prevent hydration errors.
+Get the current window dimensions. Returns `undefined` during SSR to prevent hydration mismatches.
 
 tsx
 import { useWindowSize } from "iso-hooks";
@@ -139,8 +83,8 @@ import { useWindowSize } from "iso-hooks";
 const MyComponent = () => {
   const { width, height } = useWindowSize();
 
-  // Handle loading state or SSR
-  if (!width || !height) return <div>Loading...</div>;
+  // Handle loading state until the hook runs on the client
+  if (!width) return <div>Loading...</div>;
 
   return (
 <div>
@@ -149,93 +93,130 @@ Window size: {width} x {height}
   );
 };
 
-### 6. `useDebounce`
+---
 
-Defer the update of a value until a specified delay has passed. Essential for search inputs to avoid excessive API calls.
+### 4. `useDebounce`
+
+Delay the execution of a value change. Useful for search inputs to prevent excessive API calls.
 
 tsx
 import { useState, useEffect } from "react";
 import { useDebounce } from "iso-hooks";
 
-const Search = () => {
-  const [text, setText] = useState("");
-  // The value will only update 500ms after the user stops typing
-  const debouncedText = useDebounce(text, 500);
+const SearchInput = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  // The debounced term will only update 500ms after the user stops typing
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
-if (debouncedText) {
-console.log("Fetching API for:", debouncedText);
-// perform API call here
+if (debouncedSearchTerm) {
+console.log("Searching for:", debouncedSearchTerm);
 }
-  }, [debouncedText]);
+  }, [debouncedSearchTerm]);
 
-  return <input onChange={(e) => setText(e.target.value)} placeholder="Search..." />;
+  return (
+<input
+onChange={(e) => setSearchTerm(e.target.value)}
+placeholder="Search..."
+/>
+  );
 };
 
-### 7. `useInterval`
+---
 
-A custom hook that sets up an interval that can access the latest state/props without resetting the timer on every render.
+### 5. `useInterval`
+
+A declarative version of `setInterval` that handles React lifecycle and closure issues correctly.
 
 tsx
+import { useState } from "react";
 import { useInterval } from "iso-hooks";
 
-const Counter = () => {
+const Timer = () => {
   const [count, setCount] = useState(0);
+  const [isPlaying, setPlaying] = useState(true);
 
-  // Increment count every second
-  useInterval(() => {
-    setCount(count + 1);
-  }, 1000);
+  // Increment count every 1000ms. Pass null to pause.
+  useInterval(
+() => {
+setCount(count + 1);
+},
+isPlaying ? 1000 : null
+  );
 
-  return <div>Count: {count}</div>;
+  return (
+<div>
+<h1>{count}</h1>
+<button onClick={() => setPlaying(!isPlaying)}>
+{isPlaying ? "Pause" : "Resume"}
+</button>
+</div>
+  );
 };
 
-### 8. `useScrollLock`
+---
 
-A hook to lock the body scroll. Useful for modals, drawers, etc. It automatically unlocks when the component unmounts.
+### 6. `useScrollLock`
+
+Prevent the body from scrolling. Useful when opening modals or drawers to prevent background scrolling.
 
 tsx
 import { useScrollLock } from "iso-hooks";
 
-const Modal = ({ isOpen }: { isOpen: boolean }) => {
+const Modal = () => {
   const { lock, unlock } = useScrollLock();
 
-  useEffect(() => {
-    if (isOpen) {
-      lock();
-    } else {
-      unlock();
-    }
-  }, [isOpen, lock, unlock]);
-
-  if (!isOpen) return null;
-
   return (
-    <div className="modal">
-      <p>Modal content</p>
-    </div>
+<div>
+<button onClick={lock}>Lock Scroll</button>
+<button onClick={unlock}>Unlock Scroll</button>
+</div>
   );
 };
 
-## 🧪 Development
+---
 
-If you want to contribute or run the tests locally:
+### 7. `useCopyToClipboard`
 
-bash
-# Install dependencies
-npm install
+Copy text to the clipboard securely.
 
-# Run tests
-npm run test
+tsx
+import { useCopyToClipboard } from "iso-hooks";
 
-# Build the package
-npm run build
+const CopyButton = () => {
+  const [copiedText, copy] = useCopyToClipboard();
+
+  return (
+<button onClick={() => copy("Hello World!")}>
+{copiedText ? "Copied!" : "Copy Text"}
+</button>
+  );
+};
+
+---
+
+### 8. `useMediaQuery`
+
+Subscribe to CSS media queries programmatically. SSR safe (returns `false` initially on server).
+
+tsx
+import { useMediaQuery } from "iso-hooks";
+
+const ResponsiveComponent = () => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  return (
+<div>
+{isMobile ? <p>Mobile Layout</p> : <p>Desktop Layout</p>}
+</div>
+  );
+};
 
 ## 🤝 Contributing
 
-We welcome contributions! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-MIT © Mani Alipour
+MIT © [ManiAlipour](https://github.com/ManiAlipour)
 ```

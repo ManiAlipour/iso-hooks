@@ -19,6 +19,8 @@
   - [useCopyToClipboard](#4-usecopytoclipboard)
   - [useWindowSize](#5-usewindowsize)
   - [useDebounce](#6-usedebounce)
+  - [useInterval](#7-useinterval)
+  - [useScrollLock](#8-usescrolllock)
 - [Development](#-development)
 - [License](#-license)
 
@@ -168,6 +170,51 @@ console.log("Fetching API for:", debouncedText);
   }, [debouncedText]);
 
   return <input onChange={(e) => setText(e.target.value)} placeholder="Search..." />;
+};
+
+### 7. `useInterval`
+
+A custom hook that sets up an interval that can access the latest state/props without resetting the timer on every render.
+
+tsx
+import { useInterval } from "iso-hooks";
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  // Increment count every second
+  useInterval(() => {
+    setCount(count + 1);
+  }, 1000);
+
+  return <div>Count: {count}</div>;
+};
+
+### 8. `useScrollLock`
+
+A hook to lock the body scroll. Useful for modals, drawers, etc. It automatically unlocks when the component unmounts.
+
+tsx
+import { useScrollLock } from "iso-hooks";
+
+const Modal = ({ isOpen }: { isOpen: boolean }) => {
+  const { lock, unlock } = useScrollLock();
+
+  useEffect(() => {
+    if (isOpen) {
+      lock();
+    } else {
+      unlock();
+    }
+  }, [isOpen, lock, unlock]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal">
+      <p>Modal content</p>
+    </div>
+  );
 };
 
 ## 🧪 Development

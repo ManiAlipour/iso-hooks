@@ -9,4 +9,10 @@ export default defineConfig({
   clean: true,
   minify: true,
   external: ["react", "react-dom"],
+
+  outExtension({ format }) {
+    return {
+      js: format === "cjs" ? ".js" : ".mjs",
+    };
+  },
 });

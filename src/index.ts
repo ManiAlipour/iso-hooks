@@ -9,3 +9,7 @@ export * from "./hooks/useMediaQuery";
 export * from "./hooks/useWindowSize";
 
 export * from "./hooks/useCopyToClipboard";
+
+export * from "./hooks/useInterval";
+
+export * from "./hooks/useScrollLock";

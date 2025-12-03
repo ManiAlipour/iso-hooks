@@ -13,3 +13,5 @@ export * from "./hooks/useCopyToClipboard";
 export * from "./hooks/useInterval";
 
 export * from "./hooks/useScrollLock";
+
+export * from "./hooks/useEventListener";

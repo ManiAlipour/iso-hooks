@@ -15,3 +15,9 @@ export * from "./hooks/useInterval";
 export * from "./hooks/useScrollLock";
 
 export * from "./hooks/useEventListener";
+
+export * from "./hooks/useHover";
+
+export * from "./hooks/useTimeout";
+
+export * from "./hooks/useIntersectionObserver";

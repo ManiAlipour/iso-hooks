@@ -149,10 +149,7 @@ const Timer = () => {
   const [count, setCount] = useState(0);
   const [isPlaying, setPlaying] = useState(true);
 
-  useInterval(
-    () => setCount(c => c + 1),
-    isPlaying ? 1000 : null
-  );
+  useInterval(() => setCount((c) => c + 1), isPlaying ? 1000 : null);
 
   return (
     <div>
@@ -218,11 +215,7 @@ import { useMediaQuery } from "iso-hooks";
 const ResponsiveComponent = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  return (
-    <div>
-      {isMobile ? <p>Mobile Layout</p> : <p>Desktop Layout</p>}
-    </div>
-  );
+  return <div>{isMobile ? <p>Mobile Layout</p> : <p>Desktop Layout</p>}</div>;
 };
 ```
 
@@ -251,17 +244,13 @@ const LogKeydown = () => {
 Detect when an element is hovered.
 
 ```tsx
-import { useRef } from "react";
 import { useHover } from "iso-hooks";
 
 const HoverComponent = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isHovered = useHover(ref);
+  const [ref, isHovered] = useHover<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {isHovered ? "You're hovering me!" : "Hover over me"}
-    </div>
+    <div ref={ref}>{isHovered ? "You're hovering me!" : "Hover over me"}</div>
   );
 };
 ```
@@ -303,6 +292,48 @@ const LazyComponent = () => {
       {entry?.isIntersecting ? "Visible in viewport" : "Scroll to reveal me!"}
     </div>
   );
+};
+```
+
+---
+
+### 1️⃣3️⃣ `useFetch`
+
+Perform HTTP requests simply, with auto-cancellation and reactivity.
+
+```tsx
+import { useFetch } from "iso-hooks";
+
+const MyApiData = () => {
+  const { data, loading, error, refetch } = useFetch("https://jsonplaceholder.typicode.com/todos/1");
+
+  if (loading) return <div>Loading...</div>;
+  if (error)   return <div>Error: {error.message}</div>;
+
+  return (
+    <div>
+      <pre>{JSON.stringify(data)}</pre>
+      <button onClick={refetch}>Refetch</button>
+    </div>
+  );
+};
+```
+
+---
+
+### 1️⃣4️⃣ `useThrottleCallback`
+
+Throttle a callback function — prevents it from firing too often, but always runs at the leading edge and optionally once at the trailing edge.
+
+```tsx
+import { useThrottleCallback } from "iso-hooks";
+
+const DemoThrottle = () => {
+  const throttledLog = useThrottleCallback(() => {
+    console.log("Throttled!");
+  }, 1000);
+
+  return <button onClick={throttledLog}>Throttle me</button>;
 };
 ```
 

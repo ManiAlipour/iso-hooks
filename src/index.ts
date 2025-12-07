@@ -21,3 +21,7 @@ export * from "./hooks/useHover";
 export * from "./hooks/useTimeout";
 
 export * from "./hooks/useIntersectionObserver";
+
+export * from "./hooks/useFetch";
+
+export * from "./hooks/useThrottleCallback";

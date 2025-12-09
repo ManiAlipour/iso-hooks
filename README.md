@@ -1,6 +1,6 @@
 # 📦 Iso Hooks
 
-A modern, lightweight, and fully SSR-safe collection of handy React hooks — **type-safe, dependency-free, and designed for today’s frameworks** like Next.js, Remix, and Vite.
+A modern, lightweight, and fully SSR-safe collection of handy React hooks — **type-safe, dependency-free, and made for today's frameworks** like Next.js, Remix, and Vite.
 
 <p align="center">
   <img src="https://img.shields.io/npm/v/iso-hooks?style=flat-square&color=blue" alt="npm version" />
@@ -13,10 +13,10 @@ A modern, lightweight, and fully SSR-safe collection of handy React hooks — **
 
 ## ✨ Features
 
-- 🛡️ **SSR-Safe:** Guaranteed to not break server-side rendering.
-- 🔷 **TypeScript First:** Full type safety and dedicated types included.
+- 🛡️ **SSR-Safe:** Works seamlessly with server-side rendering.
+- 🔷 **TypeScript First:** Strong types and dedicated definitions included.
 - 🌲 **Tree-shakeable:** Import only what you need.
-- 🪶 **No Dependencies:** Enjoy a truly lightweight bundle.
+- 🪶 **No Dependencies:** Truly lightweight bundle.
 
 ---
 
@@ -34,13 +34,13 @@ pnpm add iso-hooks
 
 ## 📚 Documentation
 
-Iso Hooks covers the essentials for modern React development, in a simple and easy-to-use API.
+Iso Hooks provides all the essentials for modern React development with a simple and secure API.
 
 ---
 
 ### 1️⃣ `useLocalStorage`
 
-Persist values in `localStorage` (SSR-safe), automatically syncing changes between tabs.
+Persist and retrieve values from localStorage in an SSR-friendly way, automatically syncing across tabs.
 
 ```tsx
 import { useLocalStorage } from "iso-hooks";
@@ -60,7 +60,7 @@ const App = () => {
 
 ### 2️⃣ `useOnClickOutside`
 
-Detect clicks outside of any element — perfect for closing popups, modals, or menus.
+Detect clicks outside any element — great for closing popups, modals, or menus.
 
 ```tsx
 import { useRef, useState } from "react";
@@ -88,7 +88,7 @@ const Modal = () => {
 
 ### 3️⃣ `useWindowSize`
 
-Access live window size — automatically SSR-safe, preventing hydration errors.
+Access live window size — SSR-safe, preventing hydration errors.
 
 ```tsx
 import { useWindowSize } from "iso-hooks";
@@ -110,7 +110,7 @@ const MyComponent = () => {
 
 ### 4️⃣ `useDebounce`
 
-Debounce a value or function, great for search boxes and rapid input.
+Debounce values or functions — ideal for search boxes or rapid input.
 
 ```tsx
 import { useState, useEffect } from "react";
@@ -139,7 +139,7 @@ const SearchInput = () => {
 
 ### 5️⃣ `useInterval`
 
-A declarative, React-safe interval that never suffers from stale closure bugs.
+A declarative, React-safe interval hook — no more stale closure bugs.
 
 ```tsx
 import { useState } from "react";
@@ -166,7 +166,7 @@ const Timer = () => {
 
 ### 6️⃣ `useScrollLock`
 
-Prevent the body scroll — perfect for modals, mobile menus, or drawers.
+Lock the body scroll — perfect for modals, mobile menus, or drawers.
 
 ```tsx
 import { useScrollLock } from "iso-hooks";
@@ -187,7 +187,7 @@ const Modal = () => {
 
 ### 7️⃣ `useCopyToClipboard`
 
-Copy any text to the clipboard with ease.
+Copy any text to the user's clipboard easily.
 
 ```tsx
 import { useCopyToClipboard } from "iso-hooks";
@@ -223,7 +223,7 @@ const ResponsiveComponent = () => {
 
 ### 9️⃣ `useEventListener`
 
-Attach event listeners to any element or the window, safely and declaratively.
+Add event listeners safely and declaratively to any element or the window.
 
 ```tsx
 import { useEventListener } from "iso-hooks";
@@ -257,9 +257,9 @@ const HoverComponent = () => {
 
 ---
 
-### 1️⃣1️⃣ `useTimeout`
+### 11️⃣ `useTimeout`
 
-Set timeouts in React, safely clearing when needed.
+Set timeouts in React, safely cleared on unmount or updates.
 
 ```tsx
 import { useState } from "react";
@@ -275,9 +275,9 @@ const TimeoutDemo = () => {
 
 ---
 
-### 1️⃣2️⃣ `useIntersectionObserver`
+### 12️⃣ `useIntersectionObserver`
 
-Observe when elements enter the viewport.
+React to elements entering or leaving the viewport.
 
 ```tsx
 import { useRef } from "react";
@@ -297,22 +297,30 @@ const LazyComponent = () => {
 
 ---
 
-### 1️⃣3️⃣ `useFetch`
+### 13️⃣ `useFetch`
 
-Perform HTTP requests simply, with auto-cancellation and reactivity.
+Easy HTTP requests, with auto-cancellation, reactivity, and loading/error state.
 
 ```tsx
 import { useFetch } from "iso-hooks";
 
 const MyApiData = () => {
-  const { data, loading, error, refetch } = useFetch("https://jsonplaceholder.typicode.com/todos/1");
+  // Pass [] as initial data so 'data' is never null!
+  const { data, loading, error, refetch } = useFetch<Todo[]>(
+    "https://jsonplaceholder.typicode.com/todos",
+    { initialData: [] }
+  );
 
-  if (loading) return <div>Loading...</div>;
-  if (error)   return <div>Error: {error.message}</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      <pre>{JSON.stringify(data)}</pre>
+      {loading && <p>Refreshing...</p>}
+      <ul>
+        {data.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
       <button onClick={refetch}>Refetch</button>
     </div>
   );
@@ -321,9 +329,9 @@ const MyApiData = () => {
 
 ---
 
-### 1️⃣4️⃣ `useThrottleCallback`
+### 14️⃣ `useThrottleCallback`
 
-Throttle a callback function — prevents it from firing too often, but always runs at the leading edge and optionally once at the trailing edge.
+Throttle a callback — fires at the start of the interval and, optionally, once at the end.
 
 ```tsx
 import { useThrottleCallback } from "iso-hooks";
@@ -336,6 +344,107 @@ const DemoThrottle = () => {
   return <button onClick={throttledLog}>Throttle me</button>;
 };
 ```
+
+---
+
+### 15️⃣ `usePrevious`
+
+Get the previous value of any variable or state — perfect for comparisons and animations.
+
+```tsx
+import { usePrevious } from "iso-hooks";
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+  const prevCount = usePrevious(count);
+
+  return (
+    <div>
+      <div>Current: {count}</div>
+      <div>Previous: {prevCount}</div>
+      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+    </div>
+  );
+};
+```
+
+---
+
+### 16️⃣ `useKeyPress`
+
+Detect when a specific keyboard key is pressed.
+
+```tsx
+import { useKeyPress } from "iso-hooks";
+
+const SpaceLogger = () => {
+  const spacePressed = useKeyPress(" ");
+
+  return <div>{spacePressed ? "Space key is down" : "Space key is up"}</div>;
+};
+```
+
+---
+
+### 17️⃣ `useToggle`
+
+Easy boolean state with a toggle function.
+
+```tsx
+import { useToggle } from "iso-hooks";
+
+const ToggleDemo = () => {
+  const [on, toggle] = useToggle(false);
+
+  return <button onClick={toggle}>{on ? "On" : "Off"}</button>;
+};
+```
+
+---
+
+### 18️⃣ `useUpdateEffect`
+
+Fire an effect only when dependencies change (not on mount) — a safe replacement for regular useEffect after mount.
+
+```tsx
+import { useState } from "react";
+import { useUpdateEffect } from "iso-hooks";
+
+const OnlyUpdates = () => {
+  const [val, setVal] = useState(0);
+
+  useUpdateEffect(() => {
+    alert("State changed: " + val);
+  }, [val]);
+
+  return <button onClick={() => setVal((v) => v + 1)}>+1</button>;
+};
+```
+
+---
+
+## 🗂 Full Hooks List
+
+| Hook Name               | Description                                |
+| ----------------------- | ------------------------------------------ |
+| useCopyToClipboard      | Copy text to the clipboard                 |
+| useDebounce             | Debounce values or functions               |
+| useEventListener        | Attach any event listener                  |
+| useFetch                | Simple & advanced HTTP data fetching       |
+| useHover                | Detect when element is hovered             |
+| useIntersectionObserver | Observe element visibility in viewport     |
+| useInterval             | Safe and modern setInterval                |
+| useKeyPress             | Listen to specific keyboard key press      |
+| useLocalStorage         | Save and retrieve values from localStorage |
+| useMediaQuery           | Listen to media queries in JS              |
+| useOnClickOutside       | Detect clicks outside elements             |
+| usePrevious             | Save previous value of a variable          |
+| useScrollLock           | Lock or unlock scrolling                   |
+| useThrottleCallback     | Throttle callbacks                         |
+| useTimeout              | Safe setTimeout in React                   |
+| useToggle               | Manage a boolean toggle                    |
+| useUpdateEffect         | Run effects after initial mount only       |
+| useWindowSize           | Get live browser window size               |
 
 ---
 

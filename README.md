@@ -297,7 +297,35 @@ const LazyComponent = () => {
 
 ---
 
-### 13️⃣ `useFetch`
+### 13️⃣ `useMeasure`
+
+Measure the size and position of a DOM element, SSR-safe.
+
+```tsx
+import { useRef } from "react";
+import { useMeasure } from "iso-hooks";
+
+const BoxMeasurement = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const bounds = useMeasure(ref);
+
+  return (
+    <div>
+      <div
+        ref={ref}
+        style={{ width: 200, height: 150, background: "#eee", margin: 16 }}
+      >
+        Resize me!
+      </div>
+      <pre>{JSON.stringify(bounds, null, 2)}</pre>
+    </div>
+  );
+};
+```
+
+---
+
+### 14️⃣ `useFetch`
 
 Easy HTTP requests, with auto-cancellation, reactivity, and loading/error state.
 
@@ -329,7 +357,7 @@ const MyApiData = () => {
 
 ---
 
-### 14️⃣ `useThrottleCallback`
+### 15️⃣ `useThrottleCallback`
 
 Throttle a callback — fires at the start of the interval and, optionally, once at the end.
 
@@ -347,7 +375,7 @@ const DemoThrottle = () => {
 
 ---
 
-### 15️⃣ `usePrevious`
+### 16️⃣ `usePrevious`
 
 Get the previous value of any variable or state — perfect for comparisons and animations.
 
@@ -370,7 +398,7 @@ const Counter = () => {
 
 ---
 
-### 16️⃣ `useKeyPress`
+### 17️⃣ `useKeyPress`
 
 Detect when a specific keyboard key is pressed.
 
@@ -386,7 +414,7 @@ const SpaceLogger = () => {
 
 ---
 
-### 17️⃣ `useToggle`
+### 18️⃣ `useToggle`
 
 Easy boolean state with a toggle function.
 
@@ -402,7 +430,7 @@ const ToggleDemo = () => {
 
 ---
 
-### 18️⃣ `useUpdateEffect`
+### 19️⃣ `useUpdateEffect`
 
 Fire an effect only when dependencies change (not on mount) — a safe replacement for regular useEffect after mount.
 
@@ -423,28 +451,73 @@ const OnlyUpdates = () => {
 
 ---
 
+### 2️⃣0️⃣ `useIsomorphicLayoutEffect`
+
+Like `useLayoutEffect`, but SSR-safe: automatically falls back to `useEffect` on the server.
+
+```tsx
+import { useIsomorphicLayoutEffect } from "iso-hooks";
+
+const UseIsoLayoutDemo = () => {
+  useIsomorphicLayoutEffect(() => {
+    // Runs only on client, not on server
+    // Useful for DOM measurements
+  }, []);
+
+  return <div>Check the console (client only)</div>;
+};
+```
+
+---
+
+### 2️⃣2️⃣ `useMousePosition`
+
+Get the mouse position within the viewport, updated live.
+
+```tsx
+import { useMousePosition } from "iso-hooks";
+
+const MousePositionDemo = () => {
+  const { x, y } = useMousePosition();
+
+  return (
+    <div>
+      Mouse: {x}, {y}
+    </div>
+  );
+};
+```
+
+---
+
 ## 🗂 Full Hooks List
 
-| Hook Name               | Description                                |
-| ----------------------- | ------------------------------------------ |
-| useCopyToClipboard      | Copy text to the clipboard                 |
-| useDebounce             | Debounce values or functions               |
-| useEventListener        | Attach any event listener                  |
-| useFetch                | Simple & advanced HTTP data fetching       |
-| useHover                | Detect when element is hovered             |
-| useIntersectionObserver | Observe element visibility in viewport     |
-| useInterval             | Safe and modern setInterval                |
-| useKeyPress             | Listen to specific keyboard key press      |
-| useLocalStorage         | Save and retrieve values from localStorage |
-| useMediaQuery           | Listen to media queries in JS              |
-| useOnClickOutside       | Detect clicks outside elements             |
-| usePrevious             | Save previous value of a variable          |
-| useScrollLock           | Lock or unlock scrolling                   |
-| useThrottleCallback     | Throttle callbacks                         |
-| useTimeout              | Safe setTimeout in React                   |
-| useToggle               | Manage a boolean toggle                    |
-| useUpdateEffect         | Run effects after initial mount only       |
-| useWindowSize           | Get live browser window size               |
+| Hook Name                 | Description                                  |
+| ------------------------- | -------------------------------------------- |
+| useCopyToClipboard        | Copy text to the clipboard                   |
+| useDebounce               | Debounce values or functions                 |
+| useDocumentTitle          | Update the document title (SSR-safe)         |
+| useEventListener          | Attach any event listener                    |
+| useFetch                  | Simple & advanced HTTP data fetching         |
+| useFocusTrap              | Trap keyboard focus within an element        |
+| useHover                  | Detect when element is hovered               |
+| useIntersectionObserver   | Observe element visibility in viewport       |
+| useInterval               | Safe and modern setInterval                  |
+| useIsomorphicLayoutEffect | SSR-safe version of useLayoutEffect          |
+| useKeyPress               | Listen to specific keyboard key press        |
+| useLocalStorage           | Save and retrieve values from localStorage   |
+| useMediaQuery             | Listen to media queries in JS                |
+| useMeasure                | Measure element size and position (SSR-safe) |
+| useMousePosition          | Track mouse position in the viewport         |
+| useNetworkStatus          | Listen to online/offline status              |
+| useOnClickOutside         | Detect clicks outside elements               |
+| usePrevious               | Save previous value of a variable            |
+| useScrollLock             | Lock or unlock scrolling                     |
+| useThrottleCallback       | Throttle callbacks                           |
+| useTimeout                | Safe setTimeout in React                     |
+| useToggle                 | Manage a boolean toggle                      |
+| useUpdateEffect           | Run effects after initial mount only         |
+| useWindowSize             | Get live browser window size                 |
 
 ---
 

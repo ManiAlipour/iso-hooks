@@ -43,5 +43,13 @@
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^4.0.14"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ManiAlipour/iso-hooks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ManiAlipour/iso-hooks/issues"
+  },
+  "homepage": "https://github.com/ManiAlipour/iso-hooks#readme"
 }
